@@ -11,10 +11,19 @@ type SearchResultType = {
   items: SearchUserType[]
 }
 
+type UserType = {
+  login: string
+  id: number
+  avatar_url: string
+  followers: number
+}
+
 const App = () => {
   const [selectedUser, setSelectedUser] = useState<SearchUserType | null>(null)
   const [users, setUsers] = useState<SearchUserType[]>([])
+  const [userDetails, setUserDetails] = useState<UserType | null>(null)
   const [tempSearch, setTempSearch] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
     if (selectedUser) {
@@ -22,15 +31,19 @@ const App = () => {
     }
   }, [selectedUser])
 
-  const fetchData = (term: string) => {
+  useEffect(() => {
     axios
-      .get<SearchResultType>(`https://api.github.com/search/users?q=${term}`)
+      .get<SearchResultType>(`https://api.github.com/search/users?q=${searchTerm}`)
       .then(res => setUsers(res.data.items))
-  }
+  }, [searchTerm])
 
   useEffect(() => {
-    fetchData('it-kamasutra')
-  }, [])
+    if (selectedUser) {
+      axios
+        .get<UserType>(`https://api.github.com/users/${selectedUser.login}`)
+        .then(res => setUserDetails(res.data))
+    }
+  }, [selectedUser])
 
   return (
     <div className={s.container}>
@@ -38,7 +51,7 @@ const App = () => {
         <div>
           <input placeholder="search" value={tempSearch} onChange={e => setTempSearch(e.currentTarget.value)} />
           <button onClick={() => {
-            fetchData(tempSearch)
+            setSearchTerm(tempSearch)
           }}>find</button>
         </div>
         <ul>
@@ -50,8 +63,15 @@ const App = () => {
         </ul>
       </div>
       <div className={s.item}>
-        <h2>Username</h2>
-        <div>Details</div>
+        {(userDetails) && <>
+          <h2>{userDetails.login}</h2>
+          <div>
+            <img src={userDetails.avatar_url} alt="img" />
+            <p>Id: {userDetails.id}</p>
+            <p>Followers: {userDetails.followers}</p>
+          </div>
+        </>
+        }
       </div>
     </div>
   );
