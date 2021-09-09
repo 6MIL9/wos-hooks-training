@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useState, Dispatch, SetStateAction } from 'react'
 
-const Header = ({tempSearch, setTempSearch, setSearchTerm}) => {
+type PropsType = {
+    setSearchTerm: Dispatch<SetStateAction<string>>
+}
+
+const Header: React.FC<PropsType> = ({ setSearchTerm }) => {
+    const [tempSearch, setTempSearch] = useState<string>('')
+
     return (
         <div>
             <input placeholder="search" value={tempSearch} onChange={e => setTempSearch(e.currentTarget.value)} />
