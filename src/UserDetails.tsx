@@ -9,7 +9,6 @@ type PropsType = {
 const UserDetails: React.FC<PropsType> = ({ selectedUser }) => {
     const [userDetails, setUserDetails] = useState<UserType | null>(null)
 
-
     useEffect(() => {
         if (selectedUser) {
             axios

@@ -1,15 +1,15 @@
 import axios from 'axios'
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SearchResultType, SearchUserType } from './App'
 import s from './App.module.css'
 
 type PropsType = {
     selectedUser: SearchUserType | null
-    setSelectedUser: Dispatch<SetStateAction<SearchUserType | null>>
+    onUserSelect: (user: SearchUserType) => void
     searchTerm: string
 }
 
-const Users: React.FC<PropsType> = ({ selectedUser, setSelectedUser, searchTerm }) => {
+const Users: React.FC<PropsType> = ({ selectedUser, onUserSelect, searchTerm }) => {
     const [users, setUsers] = useState<SearchUserType[]>([])
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const Users: React.FC<PropsType> = ({ selectedUser, setSelectedUser, searchTerm 
         <>
             <ul>
                 {users.map(u => <li key={u.id} className={selectedUser === u ? s.selected : ''} onClick={() => {
-                    setSelectedUser(u)
+                    onUserSelect(u)
                 }}>
                     {u.login}
                 </li>)}

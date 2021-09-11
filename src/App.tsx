@@ -22,7 +22,7 @@ export type UserType = {
 
 const App = () => {
   const [selectedUser, setSelectedUser] = useState<SearchUserType | null>(null)
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     if (selectedUser) {
@@ -33,8 +33,8 @@ const App = () => {
   return (
     <div className={s.container}>
       <div className={s.item}>
-        <Header setSearchTerm={setSearchTerm} />
-        <Users searchTerm={searchTerm} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+        <Header value={searchTerm} onSubmit={setSearchTerm} />
+        <Users searchTerm={searchTerm} selectedUser={selectedUser} onUserSelect={setSelectedUser} />
       </div>
       <div className={s.item}>
         <UserDetails selectedUser={selectedUser} />
